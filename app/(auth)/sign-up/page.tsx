@@ -2,7 +2,15 @@
 
 import React, { FormEvent, useState } from "react"
 import Link from "next/link"
-import { Eye, EyeOff, Lock, Mail, User } from "lucide-react"
+import {
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  Shield,
+  User,
+  UsersRound,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
@@ -12,15 +20,23 @@ interface SignUpFormData {
   name: string
   email: string
   password: string
+  role: "seeker" | "recruiter" | "admin"
 }
 
+const roles = [
+  { value: "seeker", label: "Job seeker", icon: UsersRound },
+  { value: "recruiter", label: "Recruiter", icon: User },
+  { value: "admin", label: "Admin", icon: Shield },
+] as const
+
 export default function SignUpPage() {
-    const router = useRouter();
+  const router = useRouter()
 
   const [formData, setFormData] = useState<SignUpFormData>({
     name: "",
     email: "",
     password: "",
+    role: "seeker",
   })
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -41,6 +57,7 @@ export default function SignUpPage() {
         name: formDataToSubmit.name,
         email: formDataToSubmit.email,
         password: formDataToSubmit.password,
+        role: formDataToSubmit.role,
       })
 
       if (error) {
@@ -48,8 +65,8 @@ export default function SignUpPage() {
         return
       }
       
-      console.log("Sign-up successful:", data);
-      router.push("/");
+      console.log("Sign-up successful:", data)
+      router.push("/")
     } catch (error) {
       console.error("Something went wrong:", error)
     } finally {
@@ -65,17 +82,44 @@ export default function SignUpPage() {
       />
 
       <section className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0b0b11]/90 p-6 shadow-[0_24px_80px_-40px_rgba(74,61,255,0.55)] sm:p-8">
-        <div className="mb-7">
+        <div className="mb-6">
           <p className="text-xs font-semibold tracking-[0.18em] text-[#a99fff] uppercase">
             Join HireLoop
           </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">
             Create an account
           </h1>
-          <p className="mt-2 text-sm text-white/50">Join HireLoop today</p>
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+          <fieldset>
+            <legend className="mb-2 text-sm font-medium text-white/70">
+              Joining HireLoop as
+            </legend>
+            <div className="grid grid-cols-3 gap-2">
+              {roles.map(({ value, label, icon: Icon }) => (
+                <label key={value} className="cursor-pointer">
+                  <input
+                    className="peer sr-only"
+                    type="radio"
+                    name="role"
+                    value={value}
+                    checked={formData.role === value}
+                    onChange={() =>
+                      setFormData((previous) => ({ ...previous, role: value }))
+                    }
+                  />
+                  <span className="flex min-h-[92px] flex-col items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-2 py-3 text-center transition-colors peer-checked:border-[#8174ff] peer-checked:bg-[#7462ff]/15 peer-focus-visible:ring-2 peer-focus-visible:ring-[#7462ff]/60">
+                    <Icon className="size-6 text-[#a99fff]" aria-hidden="true" />
+                    <span className="text-xs font-semibold text-white/85">
+                      {label}
+                    </span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
           <div className="relative">
             <User className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-white/35" />
             <Input
@@ -136,7 +180,7 @@ export default function SignUpPage() {
 
           <Button
             type="submit"
-            className="mt-2 h-12 w-full cursor-pointer rounded-xl bg-gradient-to-r from-[#6252f5] to-[#7965ff] text-sm font-semibold text-white shadow-[0_8px_28px_rgba(102,83,255,0.28)] transition hover:brightness-110"
+            className="mt-2 h-12 w-full rounded-xl bg-gradient-to-r from-[#6252f5] to-[#7965ff] text-sm font-semibold text-white shadow-[0_8px_28px_rgba(102,83,255,0.28)] transition hover:brightness-110"
             disabled={isLoading}
           >
             {isLoading ? "Creating account..." : "Create account"}
