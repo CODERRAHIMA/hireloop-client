@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Eye, EyeOff, Lock, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { authClient } from "@/lib/auth-client"
 
 interface SignInFormData {
   email: string
@@ -24,22 +25,39 @@ export default function SignInPage() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Collect form data — functionality to be integrated later
-    const data = { ...formData }
-    console.log("Sign-in form data:", data)
+    try {
+      const formDataToSubmit = { ...formData }
 
-    setIsLoading(false)
+      const { data, error } = await authClient.signIn.email({
+        email: formDataToSubmit.email,
+        password: formDataToSubmit.password,
+        rememberMe: true,
+        callbackURL: "/",
+      })
 
-    // TODO: integrate sign-in API call here
+      if (error) {
+        console.error("Sign-in error:", error.message)
+        return;
+      }
+
+      console.log("Sign-in successful:", data)
+    } catch (error) {
+      console.error("Something went wrong:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <div className="relative isolate flex min-h-[calc(100svh-78px)] items-center justify-center overflow-hidden bg-[#050509] px-4 py-10 text-white sm:px-6 mt-8 lg:mt-18">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(81,67,255,0.18),transparent_55%)]" />
+    <div className="relative isolate mt-8 flex min-h-[calc(100svh-78px)] items-center justify-center overflow-hidden bg-[#050509] px-4 py-10 text-white sm:px-6 lg:mt-18">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(81,67,255,0.18),transparent_55%)]"
+      />
 
       <section className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0b0b11]/90 p-6 shadow-[0_24px_80px_-40px_rgba(74,61,255,0.55)] sm:p-8">
         <div className="mb-7">
@@ -86,9 +104,13 @@ export default function SignInPage() {
               onClick={() => setShowPassword((visible) => !visible)}
               aria-label={showPassword ? "Hide password" : "Show password"}
               aria-pressed={showPassword}
-              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-md p-1 text-white/45 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7462ff]/60"
+              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-md p-1 text-white/45 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#7462ff]/60 focus-visible:outline-none"
             >
-              {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              {showPassword ? (
+                <EyeOff className="size-4" />
+              ) : (
+                <Eye className="size-4" />
+              )}
             </button>
           </div>
 
@@ -106,7 +128,7 @@ export default function SignInPage() {
 
           <Button
             type="submit"
-            className="mt-2 h-12 w-full rounded-xl bg-gradient-to-r from-[#6252f5] to-[#7965ff] text-sm font-semibold text-white shadow-[0_8px_28px_rgba(102,83,255,0.28)] transition hover:brightness-110 cursor-pointer"
+            className="mt-2 h-12 w-full cursor-pointer rounded-xl bg-gradient-to-r from-[#6252f5] to-[#7965ff] text-sm font-semibold text-white shadow-[0_8px_28px_rgba(102,83,255,0.28)] transition hover:brightness-110"
             disabled={isLoading}
           >
             {isLoading ? "Signing in..." : "Sign in"}
