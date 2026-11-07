@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth"
 import { MongoClient } from "mongodb"
 import { mongodbAdapter } from "@better-auth/mongo-adapter"
 
-const client = new MongoClient("mongodb://localhost:27017/database")
+const client = new MongoClient(process.env.BETTER_AUTH_DB_URI as string)
 const db = client.db("hireloopdb")
 
 export const auth = betterAuth({
@@ -11,10 +11,9 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      // [!code highlight]
       clientId: process.env.GOOGLE_CLIENT_ID as string, // [!code highlight]
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, // [!code highlight]
-    }, // [!code highlight]
+    }, 
   },
   database: mongodbAdapter(db, {
     client,
