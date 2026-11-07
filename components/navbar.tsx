@@ -9,6 +9,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import Image from "next/image"
+import { useSession } from "@/lib/auth-client"
+import Link from "next/link"
 
 const navItems = [
   { name: "Browse Jobs", href: "#" },
@@ -17,19 +19,24 @@ const navItems = [
 ]
 
 export function Navbar() {
+  const { data: session } = useSession()
+  console.log("user session", session)
+
   return (
     <nav className="fixed top-5 left-1/2 z-50 w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2">
       <div className="flex h-[58px] items-center justify-between rounded-2xl border border-white/[0.04] bg-[#222222]/95 px-5 shadow-lg shadow-black/10 backdrop-blur-xl sm:px-6">
         {/* Logo */}
         <div className="flex shrink-0 items-center">
-          <Image
-            src="/images/logo.png"
-            alt="HireLoop Logo"
-            width={130}
-            height={40}
-            priority
-            className="h-9 w-auto object-contain"
-          />
+          <Link href="/">
+            <Image
+              src="/images/logo.png"
+              alt="HireLoop Logo"
+              width={130}
+              height={40}
+              priority
+              className="h-9 w-auto object-contain"
+            />
+          </Link>
         </div>
 
         {/* Desktop Navigation */}
@@ -47,21 +54,27 @@ export function Navbar() {
           {/* Divider */}
           <div className="h-5 w-px bg-white/15" />
 
+          {session?.user ? <>
+            <span>Welcome, {session.user.name}</span>
+          </> : <>
           {/* Sign In */}
-          <a
+          <Link
             href="/sign-in"
             className="text-sm font-medium text-[#7565FF] transition-colors hover:text-[#958AFF]"
           >
             Sign In
-          </a>
+          </Link>
 
           {/* Get Started */}
-          <Button
-            variant="brandAccent"
-            className="h-[42px] rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
-          >
-            Get Started
-          </Button>
+          <Link href="/sign-up">
+            <Button
+              variant="brandAccent"
+              className="h-[42px] rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
+            >
+              Get Started
+            </Button>
+          </Link>
+          </>}
         </div>
 
         {/* Mobile Menu */}
@@ -91,19 +104,21 @@ export function Navbar() {
 
               <div className="my-1 h-px bg-white/10" />
 
-              <a
+              <Link
                 href="/sign-in"
                 className="rounded-xl px-4 py-3 text-sm font-medium text-[#7565FF] transition-colors hover:bg-white/10"
               >
                 Sign In
-              </a>
+              </Link>
 
-              <Button
-                variant="brandAccent"
-                className="mt-2 h-11 w-full rounded-xl"
-              >
-                Get Started
-              </Button>
+              <Link href="/sign-up">
+                <Button
+                  variant="brandAccent"
+                  className="mt-2 h-11 w-full rounded-xl"
+                >
+                  Get Started
+                </Button>
+              </Link>
             </div>
           </PopoverContent>
         </Popover>
