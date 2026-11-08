@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import Image from "next/image"
-import { useSession } from "@/lib/auth-client"
+import { authClient, useSession } from "@/lib/auth-client"
 import Link from "next/link"
 
 const navItems = [
@@ -20,7 +20,10 @@ const navItems = [
 
 export function Navbar() {
   const { data: session } = useSession()
-  console.log("user session", session)
+
+  const handleSignOut = async () => {
+    await authClient.signOut();
+  }
 
   return (
     <nav className="fixed top-5 left-1/2 z-50 w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2">
@@ -54,27 +57,38 @@ export function Navbar() {
           {/* Divider */}
           <div className="h-5 w-px bg-white/15" />
 
-          {session?.user ? <>
-            <span>Welcome, {session.user.name}</span>
-          </> : <>
-          {/* Sign In */}
-          <Link
-            href="/sign-in"
-            className="text-sm font-medium text-[#7565FF] transition-colors hover:text-[#958AFF]"
-          >
-            Sign In
-          </Link>
+          {session?.user ? (
+            <>
+              <span className="text-sm font-medium text-white/90">{session.user.name}</span>
+              <Button
+                  variant="brandAccent"
+                  onClick={handleSignOut}
+                  className="curosor pointer h-[42px] rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
+                >
+                  Sign Out
+                </Button>
+            </>
+          ) : (
+            <>
+              {/* Sign In */}
+              <Link
+                href="/sign-in"
+                className="text-sm font-medium text-[#7565FF] transition-colors hover:text-[#958AFF]"
+              >
+                Sign In
+              </Link>
 
-          {/* Get Started */}
-          <Link href="/sign-up">
-            <Button
-              variant="brandAccent"
-              className="h-[42px] rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
-            >
-              Get Started
-            </Button>
-          </Link>
-          </>}
+              {/* Get Started */}
+              <Link href="/sign-up">
+                <Button
+                  variant="brandAccent"
+                  className="cursor-pointer h-[42px] rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
+                >
+                  Get Started
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu */}

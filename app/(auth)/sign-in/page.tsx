@@ -40,13 +40,13 @@ export default function SignInPage() {
       })
 
       if (error) {
-        console.error("Sign-in error:", error.message)
+        console.log("Sign-in error:", error.message)
         return;
       }
 
       console.log("Sign-in successful:", data)
     } catch (error) {
-      console.error("Something went wrong:", error)
+      console.log("Something went wrong:", error)
     } finally {
       setIsLoading(false)
     }
