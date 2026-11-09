@@ -53,7 +53,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="relative isolate mt-8 flex min-h-[calc(100svh-78px)] items-center justify-center overflow-hidden bg-[#050509] px-4 py-10 text-white sm:px-6 lg:mt-18">
+    <div className="relative isolate flex min-h-[calc(100svh-78px)] items-center justify-center overflow-hidden bg-[#050509] px-4 py-18 text-white sm:px-6">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(81,67,255,0.18),transparent_55%)]"

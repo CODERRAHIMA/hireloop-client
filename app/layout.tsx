@@ -2,7 +2,6 @@ import { Inter, Manrope, Space_Mono } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Navbar } from "@/components/navbar"
 import { cn } from "@/lib/utils"
 import { Metadata } from "next"
 
@@ -45,7 +44,6 @@ export default function RootLayout({
     >
       <body className="font-sans">
         <ThemeProvider>
-          <Navbar />
           <main>{children}</main>
         </ThemeProvider>
       </body>

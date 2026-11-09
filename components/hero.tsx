@@ -2,8 +2,8 @@
 
 import Image from "next/image"
 import { Search, MapPin } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Button } from "./ui/button"
 
 const trendingRoles = ["Product Designer", "AI Engineering", "Dev-ops Engineer"]
 
@@ -37,12 +37,12 @@ export function Hero() {
           <div className="h-px max-w-[65px] flex-1 bg-gradient-to-r from-transparent to-white/40" />
 
           {/* Badge */}
-          <div className="inline-flex shrink-0 items-center gap-2 font-space-mono rounded-full border border-white/10 bg-[#171719] px-4 py-2 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+          <div className="inline-flex shrink-0 items-center gap-2 font-space-mono rounded-full border border-white/10 bg-[#171719] px-2 sm:px-4 py-2 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
             <span className="text-sm">💼</span>
 
             <span className="text-sm font-bold text-white">50,000+</span>
 
-            <span className="text-[13px] tracking-wide text-white/45">
+            <span className="text-[12px] sm:text-[13px] tracking-wide text-white/45">
               NEW JOBS THIS MONTH
             </span>
           </div>

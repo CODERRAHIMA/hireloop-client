@@ -22,7 +22,7 @@ export function Navbar() {
   const { data: session } = useSession()
 
   const handleSignOut = async () => {
-    await authClient.signOut();
+    await authClient.signOut()
   }
 
   return (
@@ -59,14 +59,16 @@ export function Navbar() {
 
           {session?.user ? (
             <>
-              <span className="text-sm font-medium text-white/90">{session.user.name}</span>
+              <span className="text-sm font-medium text-white/90">
+                {session.user.name}
+              </span>
               <Button
-                  variant="brandAccent"
-                  onClick={handleSignOut}
-                  className="curosor pointer h-[42px] rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
-                >
-                  Sign Out
-                </Button>
+                variant="brandAccent"
+                onClick={handleSignOut}
+                className="curosor pointer h-[42px] rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
+              >
+                Sign Out
+              </Button>
             </>
           ) : (
             <>
@@ -82,7 +84,7 @@ export function Navbar() {
               <Link href="/sign-up">
                 <Button
                   variant="brandAccent"
-                  className="cursor-pointer h-[42px] rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
+                  className="h-[42px] cursor-pointer rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
                 >
                   Get Started
                 </Button>
@@ -118,21 +120,35 @@ export function Navbar() {
 
               <div className="my-1 h-px bg-white/10" />
 
-              <Link
-                href="/sign-in"
-                className="rounded-xl px-4 py-3 text-sm font-medium text-[#7565FF] transition-colors hover:bg-white/10"
-              >
-                Sign In
-              </Link>
+              {session?.user ? (
+                <>
+                  <Button
+                    variant="brandAccent"
+                    onClick={handleSignOut}
+                    className="curosor pointer h-[42px] rounded-xl px-5 text-sm font-medium shadow-md shadow-[#6655FF]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6655FF]/30"
+                  >
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/sign-in"
+                    className="rounded-xl px-4 py-3 text-sm font-medium text-[#7565FF] transition-colors hover:bg-white/10"
+                  >
+                    Sign In
+                  </Link>
 
-              <Link href="/sign-up">
-                <Button
-                  variant="brandAccent"
-                  className="mt-2 h-11 w-full rounded-xl"
-                >
-                  Get Started
-                </Button>
-              </Link>
+                  <Link href="/sign-up">
+                    <Button
+                      variant="brandAccent"
+                      className="mt-2 h-11 w-full rounded-xl"
+                    >
+                      Get Started
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </PopoverContent>
         </Popover>
