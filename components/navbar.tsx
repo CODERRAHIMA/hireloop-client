@@ -12,14 +12,15 @@ import Image from "next/image"
 import { authClient, useSession } from "@/lib/auth-client"
 import Link from "next/link"
 
-const navItems = [
-  { name: "Browse Jobs", href: "#" },
-  { name: "Company", href: "#" },
-  { name: "Pricing", href: "#" },
-]
-
 export function Navbar() {
   const { data: session } = useSession()
+
+  const navItems = [
+    { name: "Browse Jobs", href: "#" },
+    { name: "Company", href: "#" },
+    { name: "Pricing", href: "#" },
+    { name: "Dashboard", href: `/dashboard/${session?.user.role || "seeker"}` },
+  ] as const;
 
   const handleSignOut = async () => {
     await authClient.signOut()
